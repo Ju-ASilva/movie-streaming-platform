@@ -3,3 +3,21 @@ Feature: Users
     Como um usuário da plataforma
     Eu desejo ter uma conta e personalizar livremente o meu perfil
     Para que eu seja único na plataforma e tenha uma experiência personalizada
+
+Scenario: Criação de uma nova conta
+    Given eu estou na tela "Página inicial"  
+    When eu seleciono "Cadastrar nova conta"
+    And Preencho username com "llucasEmanuel"
+    And Preencho senha com "lukinhas#123"
+    And Preencho email com "lluukkaass62@gmail.com"
+    And Seleciono "Cadastrar"
+    Then Eu devo ver uma mensagem de confirmação "Conta criada com sucesso"
+
+Scenario: Atualização da conta
+    Given eu estou logado como "abobrinha" e acesso a tela "Editar perfil"
+    When eu altero o meu "Nickname" para "REPOLHOROXO"
+    And faço o upload de uma nova imagem para o "Banner" e para a "Foto de perfil" 
+    And escrevo na descrição: "o maior fã de filmes do adam sandler" 
+    And seleciono em "Salvar alterações" 
+    Then o sistema deve exibir a mensagem "Perfil atualizado com sucesso!" 
+    And ao acessar minha página pública, todos os usuários devem ver o novo nickname, as novas imagens e a descrição atualizada 
