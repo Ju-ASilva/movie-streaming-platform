@@ -19,3 +19,8 @@ And clico em enviar
 Then recebo uma mensagem erro por não colocar o nome 
 And a playlist não é criada
 
+Scenario: adicionar um filme que já está na playlist
+Given vejo um filme interessante
+When clico para adicionar o filme a uma playlist existente
+And não lembro que esse filme já está na playlist
+Then recebo uma mensagem de erro comunicando que o filme já está na playlist
