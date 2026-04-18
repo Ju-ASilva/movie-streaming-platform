@@ -24,3 +24,4 @@ Given vejo um filme interessante
 When clico para adicionar o filme a uma playlist existente
 And não lembro que esse filme já está na playlist
 Then recebo uma mensagem de erro comunicando que o filme já está na playlist
+And volto para a página anterior
