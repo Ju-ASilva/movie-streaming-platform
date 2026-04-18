@@ -38,5 +38,3 @@ And quero que meus amigos vejam minha playlist
 When clico no símbolo de compartilhar
 Then possuo os links de compartilhamento para os meus amigos entrarem
 And posso enviar os links por onde quiser
-
-teste para a atividade
