@@ -6,13 +6,14 @@ import { MinhasPlaylistsPage } from "./pages/MinhasPlaylists/MinhasPlaylistsPage
 import { HistoryPage } from "./pages/History/HistoryPage"; 
 import { MovieDetailsPage } from "./pages/MovieDetails/MovieDetailsPage";
 import { AccountPage } from "./pages/Account/AccountPage";
+import { SearchPage } from "./pages/Search/SearchPage"; // 🚀 1. Importando sua página
 import type { Movie } from "./types";
 
 function App() {
   const navigate = useNavigate();
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  // Set the currentUserId to "1" to match Carlos (from the seeded database), ensuring full BDD/manual testing compatibility
+  // Mantendo o padrão da equipe para testes manuais e de BDD
   const currentUserId = "1";
 
   return (
@@ -25,6 +26,7 @@ function App() {
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHome={() => navigate("/")}
             onGoToHistory={() => navigate("/history")}
+            onGoToSearch={() => navigate("/search")} // 🚀 2. Ensinando a Home a ir para a Busca
             onSelectMovie={(movie) => {
               setSelectedMovie(movie);
               navigate(`/movies/${movie.id}`);
@@ -33,6 +35,23 @@ function App() {
           />
         }
       />
+      
+      {/* 🚀 3. A NOVA ROTA DA SUA TELA DE BUSCA */}
+      <Route
+        path="/search"
+        element={
+          <SearchPage
+            onGoToHome={() => navigate("/")}
+            onGoToPlaylists={() => navigate("/playlists")}
+            onGoToHistory={() => navigate("/history")}
+            onSelectMovie={(movie) => {
+              setSelectedMovie(movie);
+              navigate(`/movies/${movie.id}`);
+            }}
+          />
+        }
+      />
+
       <Route
         path="/playlists"
         element={
@@ -42,6 +61,7 @@ function App() {
           />
         }
       />
+      
       <Route
         path="/history"
         element={
@@ -54,6 +74,7 @@ function App() {
           />
         }
       />
+      
       <Route
         path="/movies/:id"
         element={
@@ -76,6 +97,7 @@ function App() {
           )
         }
       />
+      
       <Route
         path="/perfil"
         element={

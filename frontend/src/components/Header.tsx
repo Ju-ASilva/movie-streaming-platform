@@ -1,4 +1,5 @@
 import cinemaLogo from "../assets/cinema_logo.png"; // Ajuste o caminho se necessário
+import './Header.css';
 
 interface HeaderProps {
   activePage: "home" | "playlists" | "perfil" | string;
@@ -7,9 +8,10 @@ interface HeaderProps {
   onLogout?: () => void;
   onGoToHistory?: () => void;
   onGoToProfile?: () => void;
+  onGoToSearch?: () => void;
 }
 
-export function Header({ activePage, onGoToHome, onGoToPlaylists, onLogout, onGoToHistory, onGoToProfile}: HeaderProps) {
+export function Header({ activePage, onGoToHome, onGoToPlaylists, onLogout, onGoToHistory, onGoToProfile, onGoToSearch}: HeaderProps) {
   return (
     <header className="home-header">
       <img 
@@ -22,6 +24,20 @@ export function Header({ activePage, onGoToHome, onGoToPlaylists, onLogout, onGo
 
       <div className="home-header-right">
         <nav className="home-nav">
+          {/* BOTÃO DE PESQUISA ATUALIZADO */}
+          <button 
+            className={`header-outline-button ${activePage === "search" ? "active" : ""}`} 
+            onClick={onGoToSearch}
+            type="button"
+          >
+            {/* Note que o stroke mudou para "currentColor" */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Pesquisa
+          </button>
+
           <button 
             className={`home-nav-button ${activePage === "home" ? "active" : ""}`} 
             type="button"
