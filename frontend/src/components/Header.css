@@ -1,0 +1,31 @@
+/* Estilo base do botão */
+.header-outline-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1C1B1B; 
+  color: #E5E2E1;
+  border: 1px solid #3a3a3a; 
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  /* O "all" garante que a mudança de cor do texto e fundo seja suave */
+  transition: all 0.2s; 
+}
+
+/* 🚀 NOVO: Efeito ao passar o mouse por cima (Amarelo) */
+.header-outline-button:hover {
+  background-color: #ffc107;
+  color: black;
+  border-color: #ffc107;
+  transform: scale(1.02);
+}
+
+/* 🚀 NOVO: Estado quando o usuário ESTÁ na página de pesquisa (Amarelo contínuo) */
+.header-outline-button.active {
+  background-color: #ffc107;
+  color: black;
+  border-color: #ffc107;
+}
