@@ -23,7 +23,7 @@ interface HomePageProps {
   onGoToProfile?: () => void;
 }
 
-export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, onGoToRecommendations, onSelectMovie, onGoToProfile }: HomePageProps) {
+export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, onGoToSearch, onGoToRecommendations, onSelectMovie, onGoToProfile }: HomePageProps) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loadingMovies, setLoadingMovies] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -305,6 +305,8 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
                 </div>
               )}
             </div>
+          </div>
+        </section>
 
         {/* SEÇÃO ORIGINAL DO GRID DE FILMES */}
         <section className="catalog-section">

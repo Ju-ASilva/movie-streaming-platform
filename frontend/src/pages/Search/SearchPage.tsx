@@ -82,7 +82,7 @@ export function SearchPage({ onGoToHome, onGoToPlaylists, onGoToHistory, onSelec
               placeholder="Digite o que deseja"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              onKeyDown={handleKeyDown} /* 🚀 Ativando a escuta do Enter */
+              onKeyDown={handleKeyDown} 
               className="search-input-large"
             />
           </div>

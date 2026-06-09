@@ -12,7 +12,7 @@ import { MovieDetailsPage } from "./pages/MovieDetails/MovieDetailsPage";
 import { Register } from "./pages/Register/register";
 import { AccountPage } from "./pages/Account/AccountPage";
 import { RecomendadosPage } from "./pages/Recomendados/RecomendadosPage";
-
+import { SearchPage } from "./pages/Search/SearchPage";
 import type { LoggedUser, Movie } from "./types";
 
 const STORAGE_KEY = "cinema_logged_user";
@@ -118,11 +118,8 @@ function App() {
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHome={() => navigate("/")}
             onGoToHistory={() => navigate("/history")}
-<<<<<<< HEAD
-            onGoToSearch={() => navigate("/search")} // 🚀 2. Ensinando a Home a ir para a Busca
-=======
+            onGoToSearch={() => navigate("/search")}
             onGoToRecommendations={() => navigate("/recommendations")}
->>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
             onSelectMovie={(movie) => {
               setSelectedMovie(movie);
               navigate(`/movies/${movie.id}`);
@@ -131,9 +128,7 @@ function App() {
           />
         }
       />
-<<<<<<< HEAD
       
-      {/* 🚀 3. A NOVA ROTA DA SUA TELA DE BUSCA */}
       <Route
         path="/search"
         element={
@@ -148,8 +143,6 @@ function App() {
           />
         }
       />
-=======
->>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
 
       <Route
         path="/playlists"
@@ -161,11 +154,7 @@ function App() {
           />
         }
       />
-<<<<<<< HEAD
       
-=======
-
->>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
       <Route
         path="/history"
         element={
@@ -179,9 +168,6 @@ function App() {
           />
         }
       />
-<<<<<<< HEAD
-      
-=======
 
       <Route
         path="/recommendations"
@@ -201,7 +187,6 @@ function App() {
         }
       />
 
->>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
       <Route
         path="/movies/:id"
         element={
@@ -227,11 +212,7 @@ function App() {
           )
         }
       />
-<<<<<<< HEAD
-      
-=======
 
->>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
       <Route
         path="/perfil"
         element={
