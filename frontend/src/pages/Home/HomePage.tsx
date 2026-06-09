@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { MovieCard } from "../../components/MovieCard";
 import { Header } from "../../components/Header"; 
-import { KeepWatchingCard } from "../../components/KeepWatchingCard";
+import { KeepWatchingCard } from "../../components/KeepWatchingCard"; // Certifique-se de que o card está importado
 import { getMovies } from "../../services/movieApi";
-import { getUnfinishedMoviesByUserId } from "../../services/historyApi"; 
+import { movieService } from "../../services/movieService";
+import { getUnfinishedMoviesByUserId } from "../../services/historyApi";
 import {
   addMovieToPlaylist,
   getPlaylistsByUserId,
@@ -17,20 +18,21 @@ interface HomePageProps {
   onGoToHome?: () => void;
   onGoToHistory: () => void;
   onGoToSearch: () => void; 
+  onGoToRecommendations: () => void;
   onSelectMovie: (movie: Movie) => void;
-  onGoToProfile?: () => void; 
+  onGoToProfile?: () => void;
 }
 
-export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, onGoToSearch, onSelectMovie, onGoToProfile }: HomePageProps) {
+export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, onGoToRecommendations, onSelectMovie, onGoToProfile }: HomePageProps) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loadingMovies, setLoadingMovies] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
   const [keepWatchingMovies, setKeepWatchingMovies] = useState<{
     movieId: string;
     title: string;
     image?: string | null;
     progress_percentage: number;
+    last_position: number; 
   }[]>([]);
   const [isLoadingKeepWatching, setIsLoadingKeepWatching] = useState(false);
 
@@ -56,14 +58,15 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
   const [selectedGenre, setSelectedGenre] = useState<string>(""); 
   const [isGenreMenuOpen, setIsGenreMenuOpen] = useState(false);
 
+
   useEffect(() => {
     async function loadMovies() {
       try {
         setLoadingMovies(true);
         setError(null);
-        
+
         const data = await getMovies(undefined, selectedGenre !== "" ? selectedGenre : undefined);
-        
+
         setMovies(data);
       } catch (err) {
         setError(
@@ -132,11 +135,40 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
         type: "error",
         text:
           err instanceof Error
-            ? err.message
-            : "Erro inesperado ao buscar playlists disponíveis",
+          ? err.message
+          : "Erro inesperado ao buscar playlists disponíveis",
       });
     } finally {
       setIsLoadingPlaylists(false);
+    }
+  }
+
+  async function handleResumeMovie(movieId: string, resumePosition: number) {
+    try {
+      // Busca os metadados completos do filme antes de navegar
+      const metadata = await movieService.getMovieDetails(movieId);
+
+      const movieToOpen: Movie = {
+        id: metadata.id,
+        title: metadata.title,
+        url_movie: undefined,
+        img_url: metadata.img_url,
+        synopsis: metadata.synopsis,
+        genres: metadata.genres,
+        isPopular: false,
+        duration: metadata.duration,
+        director: metadata.director,
+        cast: metadata.cast,
+        createdAt: new Date().toISOString(),
+        year: metadata.year,
+        resumePosition,
+      };
+
+      onSelectMovie(movieToOpen);
+    } catch (err) {
+      console.error("Erro ao carregar metadados do filme para retomar:", err);
+      // Fallback: navegar apenas com id e título mínimo
+      onSelectMovie({ id: movieId, title: "Filme", genres: "", isPopular: false, createdAt: new Date().toISOString(), } as Movie);
     }
   }
 
@@ -188,6 +220,7 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
         onGoToHistory={onGoToHistory}
         onGoToSearch={onGoToSearch}
         onGoToProfile={onGoToProfile}
+        onGoToRecommendations={onGoToRecommendations}
       />
 
       <main className="home-content">
@@ -195,7 +228,7 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
           <p className="home-eyebrow">Catálogo</p>
           <h1>Página Principal</h1>
           <p>
-            Explore o catálogo de filmes e organize seus favoritos em playlists.
+            Explore o catálogo de filmes e organize seus favoritos in playlists.
           </p>
         </section>
 
@@ -210,9 +243,9 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
         <section className="keep-watching-section">
           <div className="section-title-wrapper">
             <h2>Continuar Assistindo</h2>
-            <div className="section-title-line"></div>
+            <div className="section-title-line"></div> {/* Linha que vai até o outro lado */}
           </div>
-          
+
           {isLoadingKeepWatching ? (
             <p className="catalog-empty-message">Carregando filmes em andamento...</p>
           ) : keepWatchingMovies.length === 0 ? (
@@ -225,7 +258,7 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
                     title={item.title}
                     thumbnailUrl={item.image ?? undefined}
                     progressPercentage={item.progress_percentage}
-                    onClick={() => console.log(`Clicou no filme: ${item.title}`)}
+                    onClick={() => handleResumeMovie(item.movieId, item.last_position)}
                   />
                 </div>
               ))}
@@ -233,7 +266,7 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
           )}
         </section>
 
-        <section className="catalog-section">
+              <section className="catalog-section">
           <div className="catalog-header-flex">
             <div className="section-title-wrapper">
               <h2>{selectedGenre ? `Filmes de ${selectedGenre}` : "Todos os Filmes"}</h2>
@@ -272,32 +305,38 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
                 </div>
               )}
             </div>
+
+        {/* SEÇÃO ORIGINAL DO GRID DE FILMES */}
+        <section className="catalog-section">
+          <div className="section-title-wrapper">
+            <h2>Todos os Filmes</h2>
+            <div className="section-title-line"></div> {/* Linha que vai até o outro lado */}
           </div>
 
-        {loadingMovies && (
-          <p className="catalog-empty-message">Carregando filmes...</p>
-        )}
+          {loadingMovies && (
+            <p className="catalog-empty-message">Carregando filmes...</p>
+          )}
 
-        {!loadingMovies && movies.length === 0 && !error && (
-          <p className="catalog-empty-message">
-            Nenhum filme encontrado no catálogo.
-          </p>
-        )}
+          {!loadingMovies && movies.length === 0 && !error && (
+            <p className="catalog-empty-message">
+              Nenhum filme encontrado no catálogo.
+            </p>
+          )}
 
-        <div className="movie-grid">
-          {movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
-              onAddToPlaylist={openAddMovieToPlaylistModal}
-              onSelectMovie={onSelectMovie}
-            />
-          ))}
-        </div>
-      </section>
+          <div className="movie-grid">
+            {movies.map((movie) => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                onAddToPlaylist={openAddMovieToPlaylistModal}
+                onSelectMovie={onSelectMovie}
+              />
+            ))}
+          </div>
+        </section>
       </main>
 
-      {/* MODAL DE PLAYLIST INTACTO */}
+      {/* MODAL DE PLAYLIST */}
       {isPlaylistModalOpen && selectedMovie && (
         <div className="catalog-modal-backdrop">
           <section className="catalog-modal">

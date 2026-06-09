@@ -1,23 +1,115 @@
 import { useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+// ✨ Importamos o Navigate aqui para os redirecionamentos de segurança
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import "./App.css";
+
+import { WelcomePage } from "./pages/Welcome/WelcomePage";
+import { LoginPage } from "./pages/Login/LoginPage";
 import { HomePage } from "./pages/Home/HomePage";
 import { MinhasPlaylistsPage } from "./pages/MinhasPlaylists/MinhasPlaylistsPage";
-import { HistoryPage } from "./pages/History/HistoryPage"; 
+import { HistoryPage } from "./pages/History/HistoryPage";
 import { MovieDetailsPage } from "./pages/MovieDetails/MovieDetailsPage";
+import { Register } from "./pages/Register/register";
 import { AccountPage } from "./pages/Account/AccountPage";
-import { SearchPage } from "./pages/Search/SearchPage"; // 🚀 1. Importando sua página
-import type { Movie } from "./types";
+import { RecomendadosPage } from "./pages/Recomendados/RecomendadosPage";
+
+import type { LoggedUser, Movie } from "./types";
+
+const STORAGE_KEY = "cinema_logged_user";
+
+function getStoredUser(): LoggedUser | null {
+  const storedUser = localStorage.getItem(STORAGE_KEY);
+
+  if (!storedUser) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(storedUser) as LoggedUser;
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+    return null;
+  }
+}
 
 function App() {
   const navigate = useNavigate();
+
+  const [currentUser, setCurrentUser] = useState<LoggedUser | null>(
+    getStoredUser,
+  );
+
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  // Mantendo o padrão da equipe para testes manuais e de BDD
-  const currentUserId = "1";
+  function handleLogin(user: LoggedUser) {
+    setCurrentUser(user);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    navigate("/");
+  }
 
+  // ✨ NOVA FUNÇÃO: Faz o login e envia diretamente para as playlists!
+  function handleRegisterSuccess(user: LoggedUser) {
+    setCurrentUser(user);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    navigate("/"); 
+  }
+
+  function handleLogout() {
+    setCurrentUser(null);
+    localStorage.removeItem(STORAGE_KEY);
+    setSelectedMovie(null);
+    navigate("/");
+  }
+
+  function handleGoToSignup() {
+    navigate("/register");
+  }
+
+  // --- FLUXO NÃO AUTENTICADO ---
+  if (!currentUser) {
+    return (
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <LoginPage
+              onLogin={handleLogin}
+              onGoToSignup={handleGoToSignup}
+            />
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <Register 
+              onLogin={handleRegisterSuccess} /*  Passamos a nova função aqui! */
+              onGoToHome={() => navigate("/")} /*  Destino correto */
+              onGoToLogin={() => navigate("/login")} 
+            />
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <WelcomePage
+              onGoToLogin={() => navigate("/login")}
+              onGoToSignup={handleGoToSignup}
+            />
+          }
+        />
+      </Routes>
+    );
+  }
+
+  const currentUserId = currentUser.id;
+
+  // --- FLUXO AUTENTICADO ---
   return (
     <Routes>
+      {/* Rota /register apagada daqui para não causar conflitos com utilizadores logados */}
+
       <Route
         path="/"
         element={
@@ -26,7 +118,11 @@ function App() {
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHome={() => navigate("/")}
             onGoToHistory={() => navigate("/history")}
+<<<<<<< HEAD
             onGoToSearch={() => navigate("/search")} // 🚀 2. Ensinando a Home a ir para a Busca
+=======
+            onGoToRecommendations={() => navigate("/recommendations")}
+>>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
             onSelectMovie={(movie) => {
               setSelectedMovie(movie);
               navigate(`/movies/${movie.id}`);
@@ -35,6 +131,7 @@ function App() {
           />
         }
       />
+<<<<<<< HEAD
       
       {/* 🚀 3. A NOVA ROTA DA SUA TELA DE BUSCA */}
       <Route
@@ -51,6 +148,8 @@ function App() {
           />
         }
       />
+=======
+>>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
 
       <Route
         path="/playlists"
@@ -58,10 +157,15 @@ function App() {
           <MinhasPlaylistsPage
             userId={currentUserId}
             onGoToHome={() => navigate("/")}
+            onGoToRecommendations={() => navigate("/recommendations")}
           />
         }
       />
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
       <Route
         path="/history"
         element={
@@ -71,10 +175,33 @@ function App() {
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHistory={() => navigate("/history")}
             onGoToProfile={() => navigate("/perfil")}
+            onGoToRecommendations={() => navigate("/recommendations")}
           />
         }
       />
+<<<<<<< HEAD
       
+=======
+
+      <Route
+        path="/recommendations"
+        element={
+          <RecomendadosPage
+            userId={currentUserId}
+            onGoToHome={() => navigate("/")}
+            onGoToPlaylists={() => navigate("/playlists")}
+            onGoToHistory={() => navigate("/history")}
+            onGoToProfile={() => navigate("/perfil")} 
+            onGoToRecommendations={() => navigate("/recommendations")}
+            onSelectMovie={(movie) => {
+              setSelectedMovie(movie);
+              navigate(`/movies/${movie.id}`);
+            }}
+          />
+        }
+      />
+
+>>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
       <Route
         path="/movies/:id"
         element={
@@ -82,13 +209,16 @@ function App() {
             <MovieDetailsPage
               movie={selectedMovie}
               userId={currentUserId}
-              onGoToHome={() => navigate("/")}
+              onGoBack={() => navigate(-1)}
             />
           ) : (
             <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4">
-              <p className="text-gray-400 font-semibold text-lg">Filme não selecionado.</p>
-              <button 
-                onClick={() => navigate("/")} 
+              <p className="text-gray-400 font-semibold text-lg">
+                Filme não selecionado.
+              </p>
+
+              <button
+                onClick={() => navigate("/")}
                 className="px-6 py-2 bg-[#FFC107] text-black font-bold rounded-lg hover:bg-yellow-500 transition-colors"
               >
                 Voltar para a Página Principal
@@ -97,7 +227,11 @@ function App() {
           )
         }
       />
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> c69e4c55dbe6fd1b10300b705ddc467bbbaaa003
       <Route
         path="/perfil"
         element={
@@ -106,13 +240,13 @@ function App() {
             onGoToHome={() => navigate("/")}
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHistory={() => navigate("/history")}
-            onLogout={() => {
-              console.log("Logout executado");
-              navigate("/");
-            }}
+            onLogout={handleLogout}
           />
         }
       />
+
+      {/* ✨ Rota de segurança: se tentar entrar em local proibido, é redirecionado para a Home */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

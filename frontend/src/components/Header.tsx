@@ -1,17 +1,18 @@
-import cinemaLogo from "../assets/cinema_logo.png"; 
+import cinemaLogo from "../assets/cinema_logo.png"; // Ajuste o caminho se necessário
 import './Header.css';
 
 interface HeaderProps {
-  activePage: "home" | "playlists" | "perfil" | string;
+  activePage: "home" | "playlists" | "perfil" | "history" | "recommendations" | string;
   onGoToHome?: () => void;
   onGoToPlaylists?: () => void;
   onLogout?: () => void;
   onGoToHistory?: () => void;
   onGoToProfile?: () => void;
+  onGoToRecommendations?: () => void;
   onGoToSearch?: () => void;
 }
 
-export function Header({ activePage, onGoToHome, onGoToPlaylists, onLogout, onGoToHistory, onGoToProfile, onGoToSearch}: HeaderProps) {
+export function Header({ activePage, onGoToHome, onGoToPlaylists, onLogout, onGoToHistory, onGoToProfile, onGoToRecommendations, onGoToSearch }: HeaderProps) {
   return (
     <header className="home-header">
       <img 
@@ -35,7 +36,6 @@ export function Header({ activePage, onGoToHome, onGoToPlaylists, onLogout, onGo
             </svg>
             Pesquisa
           </button>
-
           <button 
             className={`home-nav-button ${activePage === "home" ? "active" : ""}`} 
             type="button"
@@ -50,6 +50,14 @@ export function Header({ activePage, onGoToHome, onGoToPlaylists, onLogout, onGo
             onClick={onGoToPlaylists}
           >
             Minhas Playlists
+          </button>
+
+          <button
+            className={`home-nav-button ${activePage === "recommendations" ? "active" : ""}`} 
+            type="button"
+            onClick={onGoToRecommendations}
+          >
+            Recomendados
           </button>
         </nav>
 
