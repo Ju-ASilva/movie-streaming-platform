@@ -12,7 +12,6 @@ interface SearchPageProps {
   onSelectMovie: (movie: Movie) => void;
 }
 
-// 🚀 A lista de gêneros voltou para alimentar o menu suspenso
 const AVAILABLE_GENRES = [
   "Ação", "Aventura", "Comédia", "Drama", "Ficção Científica", 
   "Terror", "Romance", "Animação", "Documentário", "Suspense"
@@ -26,7 +25,6 @@ export function SearchPage({ onGoToHome, onGoToPlaylists, onGoToHistory, onSelec
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(''); 
   const [hasSearched, setHasSearched] = useState(false); 
 
-  // 🚀 Estados do nosso novo menu de filtros
   const [selectedGenre, setSelectedGenre] = useState('');
   const [isGenreMenuOpen, setIsGenreMenuOpen] = useState(false);
 
@@ -36,7 +34,6 @@ export function SearchPage({ onGoToHome, onGoToPlaylists, onGoToHistory, onSelec
     async function fetchMovies() {
       setLoading(true);
       try {
-        // Agora mandamos a palavra e o gênero para o backend!
         const data = await getMovies(appliedSearchTerm, selectedGenre !== "" ? selectedGenre : undefined);
         setMovies(data);
       } catch (error) {
@@ -50,12 +47,11 @@ export function SearchPage({ onGoToHome, onGoToPlaylists, onGoToHistory, onSelec
   }, [appliedSearchTerm, selectedGenre, hasSearched]);
 
   const handleSearchClick = () => {
-    if (searchInput.trim() === '') return; // Evita buscar vazio
+    if (searchInput.trim() === '') return; 
     setAppliedSearchTerm(searchInput);
     setHasSearched(true);
   };
 
-  // 🚀 A MÁGICA DO ENTER ACONTECE AQUI
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleSearchClick();
@@ -110,7 +106,6 @@ export function SearchPage({ onGoToHome, onGoToPlaylists, onGoToHistory, onSelec
                   <button onClick={onGoToHome} className="back-to-catalog-button">
                     Voltar ao Catálogo
                   </button>
-                  {/* Se o erro for culpa do filtro, damos a chance de limpar rápido */}
                   {selectedGenre && (
                     <button onClick={() => setSelectedGenre("")} className="clear-filter-error-button">
                       Limpar filtro de {selectedGenre}
@@ -123,14 +118,12 @@ export function SearchPage({ onGoToHome, onGoToPlaylists, onGoToHistory, onSelec
             {!loading && movies.length > 0 && (
               <div className="results-block">
                 
-                {/* 🚀 O CABEÇALHO AGORA É UM FLEXBOX QUE SEGURA O TÍTULO E O BOTÃO */}
                 <div className="results-header-flex">
                   <div className="results-header-info">
                     <h2>RESULTADOS DA PESQUISA PARA '{appliedSearchTerm}'</h2>
                     <p>{movies.length} filme{movies.length !== 1 ? 's' : ''} encontrado{movies.length !== 1 ? 's' : ''}</p>
                   </div>
 
-                  {/* 🚀 O MENU SUSPENSO IDÊNTICO AO DA HOMEPAGE */}
                   <div className="genre-filter-container">
                     <button 
                       className="search-outline-button"

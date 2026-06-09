@@ -1,4 +1,3 @@
-/* Container principal e barra (Mantido como estava) */
 .search-page-container {
   display: flex;
   flex-direction: column;
@@ -77,9 +76,6 @@
   background-color: #e0a800;
 }
 
-/* =======================================================
-   RESULTADOS E CABEÇALHO COM FILTRO SUSPENSO
-   ======================================================= */
 .search-bottom-section {
   width: 100%;
   display: flex;
@@ -94,13 +90,12 @@
   align-items: center;
 }
 
-/* 🚀 NOVO: Coloca o Título e o Botão de Filtro um de cada lado */
 .results-header-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1200px; /* Alinha perfeitamente com a grade de filmes */
+  max-width: 1200px; 
   margin-bottom: 40px;
 }
 
@@ -122,7 +117,6 @@
   font-family: inherit;
 }
 
-/* 🚀 CSS DO MENU SUSPENSO (Igual ao da Home) */
 .genre-filter-container {
   position: relative;
 }
@@ -185,9 +179,6 @@
   font-weight: bold;
 }
 
-/* =======================================================
-   GRADE E ESTADOS DE ERRO
-   ======================================================= */
 .search-results-grid {
   display: flex;
   flex-wrap: wrap;
@@ -259,4 +250,16 @@
   font-size: 18px;
   color: #aaa;
   font-family: inherit;
+}
+
+.search-results-grid .movie-card {
+  width: 260px; 
+  flex: 0 0 auto; 
+}
+
+.search-results-grid .movie-card img {
+  width: 100%;
+  height: 360px; 
+  object-fit: cover;
+  object-position: center;
 }

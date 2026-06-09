@@ -3,7 +3,7 @@ import { MovieCard } from "../../components/MovieCard";
 import { Header } from "../../components/Header"; 
 import { KeepWatchingCard } from "../../components/KeepWatchingCard";
 import { getMovies } from "../../services/movieApi";
-import { getUnfinishedMoviesByUserId } from "../../services/historyApi"; // 🚀 Importação da API da equipe
+import { getUnfinishedMoviesByUserId } from "../../services/historyApi"; 
 import {
   addMovieToPlaylist,
   getPlaylistsByUserId,
@@ -16,9 +16,9 @@ interface HomePageProps {
   onGoToPlaylists: () => void;
   onGoToHome?: () => void;
   onGoToHistory: () => void;
-  onGoToSearch: () => void; // 🚀 Sua prop
+  onGoToSearch: () => void; 
   onSelectMovie: (movie: Movie) => void;
-  onGoToProfile?: () => void; // 🚀 Prop da equipe
+  onGoToProfile?: () => void; 
 }
 
 export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, onGoToSearch, onSelectMovie, onGoToProfile }: HomePageProps) {
@@ -26,7 +26,6 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
   const [loadingMovies, setLoadingMovies] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // 🚀 ESTADOS DA EQUIPE: Filmes em andamento via API
   const [keepWatchingMovies, setKeepWatchingMovies] = useState<{
     movieId: string;
     title: string;
@@ -42,7 +41,6 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
 
   const [playlistMessage, setPlaylistMessage] = useState<PageMessage | null>(null);
 
-  // 🚀 SEUS ESTADOS: Filtro de Gênero
   const AVAILABLE_GENRES = [
     "Ação", 
     "Aventura", 
@@ -58,7 +56,6 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
   const [selectedGenre, setSelectedGenre] = useState<string>(""); 
   const [isGenreMenuOpen, setIsGenreMenuOpen] = useState(false);
 
-  // 🚀 SEU USEFFECT: Escuta o Gênero e busca filmes filtrados
   useEffect(() => {
     async function loadMovies() {
       try {
@@ -80,7 +77,6 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
     loadMovies();
   }, [selectedGenre]);
 
-  // 🚀 USEFFECT DA EQUIPE: Busca os filmes não terminados do usuário real
   useEffect(() => {
     let isMounted = true;
 
@@ -182,7 +178,6 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
 
   return (
     <div className="home-page">
-      {/* 🚀 HEADER MESCLADO */}
       <Header 
         activePage="home" 
         onGoToHome={onGoToHome}
@@ -212,7 +207,6 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
           </p>
         )}
 
-        {/* 🚀 CARROSSEL COM DADOS REAIS DA API DA EQUIPE */}
         <section className="keep-watching-section">
           <div className="section-title-wrapper">
             <h2>Continuar Assistindo</h2>
@@ -239,7 +233,6 @@ export function HomePage({ userId, onGoToPlaylists, onGoToHome, onGoToHistory, o
           )}
         </section>
 
-        {/* 🚀 SEU CATÁLOGO COM FILTRO SUSPENSO */}
         <section className="catalog-section">
           <div className="catalog-header-flex">
             <div className="section-title-wrapper">

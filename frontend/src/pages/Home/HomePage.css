@@ -370,8 +370,6 @@
   }
 }
 
-/* ESTILOS PARA O MENU DE PERFIL (DROPDOWN) */
-
 .home-header-right {
   display: flex;
   align-items: center;
@@ -575,19 +573,17 @@
   margin-bottom: 20px;
 }
 
-/* Tira o comportamento da linha que empurrava o botão pra baixo */
 .catalog-header-flex .section-title-wrapper {
   margin-bottom: 0;
-  flex: 1; /* Faz a linha ocupar apenas o espaço disponível */
-  margin-right: 20px; /* Dá um respiro antes do botão */
+  flex: 1; 
+  margin-right: 20px; 
 }
 
-/* Estilo do botão de selecionar gênero */
 .home-outline-button {
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #1C1B1B; /* <-- A cor exata que você pediu */
+  background-color: #1C1B1B; 
   color: #E5E2E1;
   border: 1px solid #3a3a3a;
   border-radius: 8px;
@@ -600,32 +596,29 @@
 }
 
 .home-outline-button:hover {
-  background-color: #2a2a2a; /* Um pouquinho mais claro para o efeito do mouse */
+  background-color: #2a2a2a; 
   transform: scale(1.02);
 }
 
-/* Container que funciona como âncora para o menu suspenso */
 .genre-filter-container {
   position: relative;
 }
 
-/* O menu escuro que desce ao clicar */
 .genre-dropdown-menu {
   position: absolute;
-  top: 110%; /* Cola exatamente embaixo do botão */
-  right: 0; /* Alinha pelo lado direito do botão */
+  top: 110%; 
+  right: 0;
   background-color: #1a1a1a; 
   border: 1px solid #333;
   border-radius: 8px;
   padding: 8px 0;
   min-width: 200px;
-  z-index: 100; /* Super importante: garante que a caixa fique POR CIMA das capas de filmes */
+  z-index: 100; 
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
 }
 
-/* Os botões dentro do menu */
 .genre-dropdown-item {
   background: transparent;
   color: #E5E2E1;
@@ -641,7 +634,6 @@
   background-color: #333;
 }
 
-/* Quando um gênero está ativado */
 .genre-dropdown-item.active {
   color: #ffc107;
   font-weight: bold;
