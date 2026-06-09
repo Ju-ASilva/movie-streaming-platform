@@ -13,6 +13,8 @@ import { Register } from "./pages/Register/register";
 import { AccountPage } from "./pages/Account/AccountPage";
 import { RecomendadosPage } from "./pages/Recomendados/RecomendadosPage";
 import { SearchPage } from "./pages/Search/SearchPage";
+import { AddMovie } from "./pages/AddMovie/AddMovie";
+
 import type { LoggedUser, Movie } from "./types";
 
 const STORAGE_KEY = "cinema_logged_user";
@@ -40,6 +42,7 @@ function App() {
   );
 
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [movieToEdit, setMovieToEdit] = useState<Movie | null>(null);
 
   function handleLogin(user: LoggedUser) {
     setCurrentUser(user);
@@ -51,7 +54,7 @@ function App() {
   function handleRegisterSuccess(user: LoggedUser) {
     setCurrentUser(user);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-    navigate("/"); 
+    navigate("/");
   }
 
   function handleLogout() {
@@ -82,10 +85,10 @@ function App() {
         <Route
           path="/register"
           element={
-            <Register 
+            <Register
               onLogin={handleRegisterSuccess} /*  Passamos a nova função aqui! */
               onGoToHome={() => navigate("/")} /*  Destino correto */
-              onGoToLogin={() => navigate("/login")} 
+              onGoToLogin={() => navigate("/login")}
             />
           }
         />
@@ -115,11 +118,20 @@ function App() {
         element={
           <HomePage
             userId={currentUserId}
+            isAdmin={currentUser?.role === 'administrador'}
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHome={() => navigate("/")}
             onGoToHistory={() => navigate("/history")}
             onGoToSearch={() => navigate("/search")}
             onGoToRecommendations={() => navigate("/recommendations")}
+            onGoToAddMovie={currentUser?.role === 'administrador' ? () => {
+              setMovieToEdit(null);
+              navigate("/add-movie");
+            } : undefined}
+            onGoToEditMovie={currentUser?.role === 'administrador' ? (movie) => {
+              setMovieToEdit(movie);
+              navigate("/add-movie");
+            } : undefined}
             onSelectMovie={(movie) => {
               setSelectedMovie(movie);
               navigate(`/movies/${movie.id}`);
@@ -177,7 +189,7 @@ function App() {
             onGoToHome={() => navigate("/")}
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHistory={() => navigate("/history")}
-            onGoToProfile={() => navigate("/perfil")} 
+            onGoToProfile={() => navigate("/perfil")}
             onGoToRecommendations={() => navigate("/recommendations")}
             onSelectMovie={(movie) => {
               setSelectedMovie(movie);
@@ -222,6 +234,19 @@ function App() {
             onGoToPlaylists={() => navigate("/playlists")}
             onGoToHistory={() => navigate("/history")}
             onLogout={handleLogout}
+          />
+        }
+      />
+
+      <Route
+        path="/add-movie"
+        element={
+          <AddMovie
+            movieToEdit={movieToEdit}
+            onCancel={() => {
+              setMovieToEdit(null);
+              navigate("/");
+            }}
           />
         }
       />
